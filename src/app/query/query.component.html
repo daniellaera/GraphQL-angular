@@ -1,0 +1,64 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<table mat-table [dataSource]="queryFields" class="mat-elevation-z8" cdkDrag>
+
+  <ng-container matColumnDef="query">
+    <th mat-header-cell *matHeaderCellDef> Query </th>
+    <td mat-cell *matCellDef="let data" style="text-align: center;">
+      <button mat-button (click)="getType(data.name)">{{data.name}}
+        <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+</table>
+
+<!-- second table-->
+<table mat-table *ngIf="namesTypes.length > 0" [dataSource]="typesFieldsNames" class="mat-elevation-z8" cdkDrag>
+
+  <ng-container matColumnDef="fields">
+    <th mat-header-cell *matHeaderCellDef> {{namesTypes}} </th>
+    <td mat-cell *matCellDef="let data" style="text-align: center;">{{data}}
+      <button mat-button>
+        <mat-icon mat-list-icon>add_circle_outline</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsFields"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnsFields;"></tr>
+</table>
+
+<!-- third table-->
+<table mat-table *ngIf="whereQueryName.length > 0" [dataSource]="queryInputFields" class="mat-elevation-z8" cdkDrag>
+
+  <ng-container matColumnDef="whereQueryFields">
+    <th mat-header-cell *matHeaderCellDef> {{whereQueryName}} </th>
+    <td mat-cell *matCellDef="let data" style="text-align: center;">{{data}}
+      <button mat-button>
+        <mat-icon mat-list-icon>add_circle_outline</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="whereQueryFields"></tr>
+  <tr mat-row *matRowDef="let row; columns: whereQueryFields;"></tr>
+</table>
+
+<!-- <div class="example-box" *ngIf="namesTypes.length > 0" cdkDrag>
+  <h3>{{namesTypes}}</h3>
+  <mat-list role="list" *ngFor="let list of typesFieldsNames">
+    <mat-list-item role="listitem">{{list}}</mat-list-item>
+  </mat-list>
+</div> -->
+
+<!-- <div class="example-box" *ngIf="whereQueryName.length > 0" cdkDrag>
+  <h3>{{whereQueryName}}</h3>
+  <mat-list role="list" *ngFor="let list of queryInputFields">
+    <mat-list-item role="listitem">{{list}}</mat-list-item>
+  </mat-list>
+</div> -->
+
+<p class="info-text mat-body-1" *ngIf="whereQueryName.length == 0 || queryFields == 0 && !isLoading">No queries!</p>
