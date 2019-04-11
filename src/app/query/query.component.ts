@@ -78,7 +78,6 @@ export class QueryComponent implements OnInit, OnDestroy {
     this.postsSubscription.unsubscribe();
   }
 
-
   state = [{ type: "Query", fields: [{ name: "patient" }], pos: { x: 14, y: 14 } }, //On dit qu on veut des patients
   { type: "PatientWherQuery", fields: [{ name: "first_name_match", value: "imad" }, { name: "birth_year_eq", value: 1987 }] }, //On filtre les patients
   { type: "Patient", fields: [{ name: "first_name" }, { name: "last_name" }, { name: "birth_year" }, { name: "id" }, { name: "eds" }] }, // Demande quels fields du patients choppe
