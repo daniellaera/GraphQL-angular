@@ -9,7 +9,7 @@
         <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
       </button>
       <button mat-button>
-        <mat-icon mat-list-icon>add_circle_outline</mat-icon>
+        <mat-icon mat-list-icon (click)="pushQuery(data.name)">add_circle_outline</mat-icon>
       </button>
     </td>
   </ng-container>

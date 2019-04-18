@@ -74,6 +74,12 @@ export class QueryComponent implements OnInit, OnDestroy {
     console.log('inputFields:::', this.queryInputFields)
   }
 
+  public pushQuery(data: string) {
+    this.queryFields.push(data);
+
+    console.log('name::', this.queryFields);
+  }
+
   ngOnDestroy() {
     this.postsSubscription.unsubscribe();
   }

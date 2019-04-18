@@ -12,23 +12,28 @@ import {
   MatProgressSpinnerModule,
   MatTableModule,
   MatIconModule,
-  MatListModule
+  MatListModule,
+  MatSelectModule
 } from "@angular/material";
 
 import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QueryComponent } from './query/query.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    QueryComponent
+    QueryComponent,
+    DropdownComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     DragDropModule,
     MatInputModule,
     MatTableModule,
@@ -38,6 +43,7 @@ import { QueryComponent } from './query/query.component';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule
   ],
