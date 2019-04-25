@@ -13,21 +13,28 @@ import {
   MatTableModule,
   MatIconModule,
   MatListModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDatepickerModule,
+  MatCheckboxModule,
+  MatRadioModule,
+  MatNativeDateModule
 } from "@angular/material";
 
 import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { QueryComponent } from './query/query.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder } from '@angular/forms';
+import { QueryBuilderModule } from "angular2-query-builder";
+import { BuilderComponent } from './builder/builder.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     QueryComponent,
-    DropdownComponent
+    DropdownComponent,
+    BuilderComponent
   ],
   imports: [
     BrowserModule,
@@ -42,12 +49,19 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
+    MatCheckboxModule,
+    NoopAnimationsModule,
+    MatInputModule,
+    MatRadioModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatExpansionModule,
     MatSelectModule,
+    QueryBuilderModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [FormBuilder],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })

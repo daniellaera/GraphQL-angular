@@ -13,6 +13,10 @@ export class DropdownComponent implements OnInit {
 
   graphqlSchema = [];
   public queryFields = [];
+  public whereQueryName = [];
+  public queryInputFields = [];
+  namesTypes = [];
+  public typesFieldsNames = [];
 
   constructor(private queryService: QueryService) { }
 
@@ -35,8 +39,27 @@ export class DropdownComponent implements OnInit {
       })
   }
 
-  newFilter(v) {
-    console.log('evented!', v)
+  public getType(typeString: string) {
+    const names = this.queryFields.filter(v => v.name == typeString).map(v => v.type.ofType.name);
+
+    const typesFields = this.graphqlSchema.filter(v => v.name == names).find(v => v.fields);
+    console.log('typesFields', typesFields);
+
+    this.namesTypes = this.queryFields.filter(v => v.name == typeString).map(v => v.type.ofType.name);
+    console.log('namesTypes:: --->::', this.namesTypes)
+
+    this.typesFieldsNames = typesFields.fields.map((v: any) => v.name);
+    console.log('typesFieldsNames!:::', this.typesFieldsNames);
+
+    // getting the corresponding whereQuery attached to each type (eds, patient, pf_dataset...)
+    this.whereQueryName = this.queryFields.filter(v => v.name == typeString).map(v => v.args[0].type.name);
+    console.log('the whereQueryName!:::', this.whereQueryName);
+
+    const filteredWhereQuery = this.graphqlSchema.filter(v => v.name == this.whereQueryName)[0];
+    console.log('filteredWhereQuery!:::', filteredWhereQuery.inputFields)
+
+    this.queryInputFields = filteredWhereQuery.inputFields.map((v: any) => v.name);
+    console.log('inputFields:::', this.queryInputFields)
   }
 
 }

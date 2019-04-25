@@ -1,6 +1,13 @@
 <mat-form-field>
   <mat-label>Choose a Query</mat-label>
-  <mat-select (selectionChange)="newFilter($event)">
-    <mat-option *ngFor="let option of queryFields" value="option">{{ option.name | uppercase }}</mat-option>
+  <mat-select>
+    <mat-option *ngFor="let option of queryFields" (click)="getType(option.name)" value="option.name">{{ option.name | uppercase }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="whereQueryName.length > 0">
+  <mat-label>Choose a WhereQuery</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let option of queryInputFields" value="option.name">{{ option | uppercase }}</mat-option>
   </mat-select>
 </mat-form-field>
