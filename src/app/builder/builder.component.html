@@ -1,8 +1,11 @@
 <h2>Custom Material</h2>
+<!-- <mat-chip-list>
+  <app-chips [query]="query"></app-chips>
+</mat-chip-list> -->
 <br>
 <mat-card>
   <query-builder [(ngModel)]='query' [config]='currentConfig' [allowRuleset]='allowRuleset'
-    [allowCollapse]='allowCollapse'>
+    [allowCollapse]='allowCollapse' [dataSource]="queryFields">
     <ng-container
       *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet">
       <button type="button" mat-icon-button color="primary" (click)="addRule()">
@@ -104,3 +107,6 @@
 </mat-card>
 
 <textarea class="output">{{query | json}}</textarea>
+
+
+<textarea class="output">{{graphQLQuery() | json}}</textarea>

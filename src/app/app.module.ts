@@ -17,7 +17,8 @@ import {
   MatDatepickerModule,
   MatCheckboxModule,
   MatRadioModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatChipsModule
 } from "@angular/material";
 
 import { AppRoutingModule } from './app.routing';
@@ -49,6 +50,7 @@ import { BuilderComponent } from './builder/builder.component';
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
+    MatChipsModule,
     MatCheckboxModule,
     NoopAnimationsModule,
     MatInputModule,

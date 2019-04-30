@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { QueryBuilderConfig } from 'angular2-query-builder';
+import { QueryBuilderConfig, Option } from 'angular2-query-builder';
 import { FormControl, FormBuilder } from '@angular/forms';
+import { QueryService } from '../query.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-builder',
@@ -9,102 +11,72 @@ import { FormControl, FormBuilder } from '@angular/forms';
 })
 export class BuilderComponent implements OnInit {
   public queryCtrl: FormControl;
-  public currentConfig: QueryBuilderConfig;
+  public currentConfig: QueryBuilderConfig = { fields: {} };
   public allowRuleset: boolean = true;
   public allowCollapse: boolean;
+  public query: any;
+  public graphqlSchema;
 
-  constructor(private formBuilder: FormBuilder) {
+  public queryFields = [];
+  postsSubscription: Subscription;
+
+  constructor(private formBuilder: FormBuilder, private queryService: QueryService) {
     this.queryCtrl = this.formBuilder.control(this.query);
-    this.currentConfig = this.config;
   }
 
-  public query = {
-    condition: 'and',
-    rules: [
-      { field: 'age', operator: '<=', entity: 'physical' },
-      { field: 'birthday', operator: '=', value: new Date(), entity: 'nonphysical' },
-      {
-        condition: 'or',
-        rules: [
-          { field: 'gender', operator: '=', entity: 'physical' },
-          { field: 'occupation', operator: 'in', entity: 'nonphysical' },
-          { field: 'school', operator: 'is null', entity: 'nonphysical' },
-          { field: 'notes', operator: '=', entity: 'nonphysical' }
-        ]
-      }
-    ]
-  };
+  ngOnInit() {
+    this.loadData();
+  }
 
-  public config: QueryBuilderConfig = {
-    fields: {
-      age: { name: 'Age', type: 'number' },
-      gender: {
-        name: 'Gender',
-        type: 'category',
-        options: [
-          { name: 'Male', value: 'm' },
-          { name: 'Female', value: 'f' }
-        ]
-      },
-      name: { name: 'Name', type: 'string' },
-      notes: { name: 'Notes', type: 'textarea', operators: ['=', '!='] },
-      educated: { name: 'College Degree?', type: 'boolean' },
-      birthday: {
-        name: 'Birthday', type: 'date', operators: ['=', '<=', '>'],
-        defaultValue: (() => new Date())
-      },
-      school: { name: 'School', type: 'string', nullable: true },
-      occupation: {
-        name: 'Occupation',
-        type: 'category',
-        options: [
-          { name: 'Student', value: 'student' },
-          { name: 'Teacher', value: 'teacher' },
-          { name: 'Unemployed', value: 'unemployed' },
-          { name: 'Scientist', value: 'scientist' }
-        ]
-      }
+  graphQLQuery() {
+
+     let graphqlQuery = {where: {}};
+     this.query.rules.forEach(r => {
+        graphqlQuery.where[r.operator] = r.value;
+    })
+    return graphqlQuery;
+  }
+
+  getConfig(): QueryBuilderConfig {
+    var config: QueryBuilderConfig = { fields: {} }
+    if (this.graphqlSchema) {
+      let whereQuery = this.graphqlSchema.filter(gs => gs.name.indexOf("WhereQuery") != -1);
+      whereQuery.forEach(element => {
+        const object = { name: element["name"], type: 'string', operators: element["inputFields"].map(inf => inf.name) };
+        config.fields[element["name"]] = object
+      });
     }
-  };
+    return config;
+  }
 
-  public entityConfig: QueryBuilderConfig = {
-    entities: {
-      physical: { name: 'Physical Attributes' },
-      nonphysical: { name: 'Nonphysical Attributes' }
-    },
-    fields: {
-      age: { name: 'Age', type: 'number', entity: 'physical' },
-      gender: {
-        name: 'Gender',
-        entity: 'physical',
-        type: 'category',
-        options: [
-          { name: 'Male', value: 'm' },
-          { name: 'Female', value: 'f' }
-        ]
-      },
-      name: { name: 'Name', type: 'string', entity: 'nonphysical' },
-      notes: { name: 'Notes', type: 'textarea', operators: ['=', '!='], entity: 'nonphysical' },
-      educated: { name: 'College Degree?', type: 'boolean', entity: 'nonphysical' },
-      birthday: {
-        name: 'Birthday', type: 'date', operators: ['=', '<=', '>'],
-        defaultValue: (() => new Date()), entity: 'nonphysical'
-      },
-      school: { name: 'School', type: 'string', nullable: true, entity: 'nonphysical' },
-      occupation: {
-        name: 'Occupation',
-        entity: 'nonphysical',
-        type: 'category',
-        options: [
-          { name: 'Student', value: 'student' },
-          { name: 'Teacher', value: 'teacher' },
-          { name: 'Unemployed', value: 'unemployed' },
-          { name: 'Scientist', value: 'scientist' }
-        ]
-      }
-    }
-  };
+  public loadData() {
+    this.postsSubscription = this.queryService.getPosts()
+      .subscribe(data$ => {
 
-  ngOnInit() { }
+        this.graphqlSchema = data$[0]["__schema"]["types"];
+        this.currentConfig = this.getConfig();
+        this.query = {
+          "condition": "and",
+          "rules": [
+            {
+              "field": "PatientWhereQuery",
+              "operator": "first_name_match",
+              "value": "Imad"
+            },
+            {
+              "field": "PatientWhereQuery",
+              "operator": "last_name_match",
+              "value": "ESSAI"
+            },
+            {
+              "field": "PatientWhereQuery",
+              "operator": "birth_year_eq",
+              "value": 1987
+            }
+          ]
+        }
+
+      })
+  }
 
 }
